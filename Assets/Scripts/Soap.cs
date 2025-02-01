@@ -5,14 +5,16 @@ using UnityEngine.EventSystems;
 
 public class Soap : BaseMovement
 {
-    CapsuleCollider capsuleCollider;
+    [SerializeField] float ramSpeed = 30f;
+    [SerializeField] float ramKnockback = 20f;
+
+    float currSpeed = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         mesh = transform.GetChild(0).gameObject;
-        capsuleCollider = mesh.GetComponent<CapsuleCollider>();
     }
 
     // Update is called once per frame
@@ -20,6 +22,8 @@ public class Soap : BaseMovement
     {
         ManageInput("HorizontalP2", "VerticalP2");
         grounded = GroundCheck();
+
+        //Debug.Log(rigidBody.velocity.magnitude);
     }
 
     private void FixedUpdate()
@@ -28,8 +32,27 @@ public class Soap : BaseMovement
         //RotateMesh();
     }
 
+    private void LateUpdate()
+    {
+        currSpeed = rigidBody.velocity.magnitude;
+    }
+
     public override Vector3 GetCenter()
     {
         return transform.position + transform.up * verticalLaunchOffset;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!collision.gameObject.CompareTag("Obstacle")) return;
+
+        Debug.Log(currSpeed);
+        if (currSpeed < ramSpeed) return;
+
+        Obstacle obstacle = collision.gameObject.GetComponent<Obstacle>();
+        if (obstacle)
+            obstacle.DestroyObstacle();
+
+        rigidBody.AddForce((-moveDirection + Vector3.up) * ramKnockback, ForceMode.Impulse);
     }
 }

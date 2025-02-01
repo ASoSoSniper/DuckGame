@@ -65,7 +65,7 @@ public class Bubble : MonoBehaviour
         if (movement)
         {
             Vector3 direction = (movement.GetCenter() - transform.position).normalized;
-            collision.rigidbody.AddForce(direction * bounceStrength, ForceMode.Impulse);
+            collision.rigidbody.AddForce(Vector3.up * bounceStrength, ForceMode.Impulse);
         }
         PopBubble();
     }

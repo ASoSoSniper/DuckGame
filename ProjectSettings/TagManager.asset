@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bubble
   - RisingCube
+  - Obstacle
   layers:
   - Default
   - TransparentFX
