@@ -1,17 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Soap : BaseMovement
 {
-    BoxCollider boxCollider;
+    CapsuleCollider capsuleCollider;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         mesh = transform.GetChild(0).gameObject;
-        boxCollider = mesh.GetComponent<BoxCollider>();
+        capsuleCollider = mesh.GetComponent<CapsuleCollider>();
     }
 
     // Update is called once per frame
@@ -24,7 +25,7 @@ public class Soap : BaseMovement
     private void FixedUpdate()
     {
         Move();
-        RotateMesh();
+        //RotateMesh();
     }
 
     public override Vector3 GetCenter()

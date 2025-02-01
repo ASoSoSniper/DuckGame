@@ -15,6 +15,7 @@ public class Duck : BaseMovement
 
     float currFireTime = 0;
     CapsuleCollider capsuleCollider;
+    Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class Duck : BaseMovement
         rigidBody = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         mesh = transform.GetChild(0).gameObject;
+        animator = mesh.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -50,18 +52,23 @@ public class Duck : BaseMovement
         {
             Shoot();
         }
+
+        animator.SetBool("IsWalking", inputDirection != Vector3.zero);
     }
 
     void Jump()
     {
         if (!grounded) return;
 
+        animator.SetTrigger("Jump");
         rigidBody.AddForce(Vector3.up * jumpStrength, ForceMode.Impulse);
     }
 
     void Shoot()
     {
         if (currFireTime > 0) return;
+
+        animator.SetTrigger("Shoot");
 
         GameObject bubble = Instantiate(bubblePrefab);
         bubble.transform.position = muzzleTransform.position;

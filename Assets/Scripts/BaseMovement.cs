@@ -4,20 +4,20 @@ using UnityEngine;
 
 public abstract class BaseMovement : MonoBehaviour
 {
-    Vector3 inputDirection = Vector3.zero;
+    protected Vector3 inputDirection = Vector3.zero;
     protected GameObject mesh;
     protected Rigidbody rigidBody;
     protected bool grounded = false;
 
     [Header("Movement")]
-    [SerializeField] float maxSpeed = 20f;
-    [SerializeField] float acceleration = 5f;
-    [SerializeField] float stopSpeed = 5f;
-    [SerializeField] float groundCheckDistance = 5f;
-    [SerializeField] float rotationSpeed = 20f;
+    [SerializeField] protected float maxSpeed = 20f;
+    [SerializeField] protected float acceleration = 5f;
+    [SerializeField] protected float stopSpeed = 5f;
+    [SerializeField] protected float groundCheckDistance = 5f;
+    [SerializeField] protected float rotationSpeed = 20f;
     [SerializeField] protected float verticalLaunchOffset = 1f;
 
-    Vector3 moveDirection = Vector3.zero;
+    protected Vector3 moveDirection = Vector3.zero;
 
     protected virtual void ManageInput(string horizontal, string vertical)
     {
@@ -53,10 +53,13 @@ public abstract class BaseMovement : MonoBehaviour
     {
         if (inputDirection == Vector3.zero) return;
 
-        Quaternion currRot = mesh.transform.rotation;
-        Quaternion targetRot = Quaternion.LookRotation(inputDirection);
+        Vector3 direction = (transform.position + inputDirection * 5f) - transform.position;
+        direction.y = 0;
 
-        mesh.transform.rotation = Quaternion.Lerp(currRot, targetRot, rotationSpeed * Time.fixedDeltaTime);
+        Quaternion currRot = mesh.transform.rotation;
+        Quaternion targetRot = Quaternion.LookRotation(direction);
+
+        mesh.transform.rotation = Quaternion.Slerp(currRot, targetRot, rotationSpeed * Time.deltaTime);
     }
 
     protected bool GroundCheck()
