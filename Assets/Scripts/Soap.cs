@@ -11,6 +11,9 @@ public class Soap : BaseMovement
 
     [Header("Groundcheck")]
     [SerializeField] float groundCheckOffset = 5f;
+    [SerializeField] AudioClip moveSound;
+    [SerializeField] float moveSoundPlayRate = 0.5f;
+    float soundPlayTime = 0f;
 
     MeshCollider meshCollider;
 
@@ -22,6 +25,7 @@ public class Soap : BaseMovement
         rigidBody = GetComponent<Rigidbody>();
         mesh = transform.GetChild(0).gameObject;
         meshCollider = mesh.transform.GetChild(0).GetComponent<MeshCollider>();
+        audioSource = meshCollider.gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -30,6 +34,18 @@ public class Soap : BaseMovement
         ManageInput("HorizontalP2", "VerticalP2");
         grounded = GroundCheck();
         meshCollider.material = grounded ? groundMat : airMat;
+
+        if (moveDirection != Vector3.zero)
+        {
+            soundPlayTime -= Time.deltaTime;
+            if (soundPlayTime <= 0f)
+            {
+                soundPlayTime = moveSoundPlayRate;
+                audioSource.pitch = Random.Range(1f, 1.2f);
+                audioSource.PlayOneShot(moveSound);
+            }
+        }
+        else soundPlayTime = 0f;
     }
 
     private void FixedUpdate()
@@ -75,6 +91,12 @@ public class Soap : BaseMovement
             ground = Physics.Raycast(ray, out groundData, groundCheckDistance, groundMask);
 
             if (ground) break;
+        }
+
+        if (ground && !grounded && rigidBody.velocity.y < 0)
+        {
+            if (!audioSource.isPlaying)
+                audioSource.PlayOneShot(groundImpactSound);
         }
 
         return ground;

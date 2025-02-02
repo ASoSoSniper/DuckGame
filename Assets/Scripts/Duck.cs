@@ -12,6 +12,7 @@ public class Duck : BaseMovement
     [SerializeField] Transform muzzleTransform;
     [SerializeField] float fireRate = 0.5f;
     [SerializeField] int maxBubbles = 2;
+    [SerializeField] AudioClip gunshotSound;
 
     float currFireTime = 0;
     CapsuleCollider capsuleCollider;
@@ -24,6 +25,7 @@ public class Duck : BaseMovement
         capsuleCollider = GetComponent<CapsuleCollider>();
         mesh = transform.GetChild(0).gameObject;
         animator = mesh.GetComponent<Animator>();
+        audioSource = mesh.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -72,6 +74,7 @@ public class Duck : BaseMovement
         if (currFireTime > 0) return;
 
         animator.SetTrigger("Shoot");
+        audioSource.PlayOneShot(gunshotSound);
 
         GameObject bubble = Instantiate(bubblePrefab);
         bubble.transform.position = muzzleTransform.position;
@@ -126,6 +129,12 @@ public class Duck : BaseMovement
         if (groundData.collider.CompareTag("Soap") && rigidBody.velocity.y < 0)
         {
             MountSoap(groundData.collider.gameObject);
+        }
+
+        if (!grounded && rigidBody.velocity.y < 0)
+        {
+            if (!audioSource.isPlaying)
+                audioSource.PlayOneShot(groundImpactSound);
         }
 
         return true;

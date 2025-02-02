@@ -7,6 +7,7 @@ public abstract class BaseMovement : MonoBehaviour
     protected Vector3 inputDirection = Vector3.zero;
     protected GameObject mesh;
     protected Rigidbody rigidBody;
+    protected AudioSource audioSource;
     protected bool grounded = false;
     protected RaycastHit groundData;
 
@@ -23,6 +24,7 @@ public abstract class BaseMovement : MonoBehaviour
     [SerializeField] protected PhysicMaterial airMat;
     [SerializeField] protected float obstacleCheckDistance = 5f;
     [SerializeField] protected LayerMask groundMask;
+    [SerializeField] protected AudioClip groundImpactSound;
 
     protected Vector3 moveDirection = Vector3.zero;
 

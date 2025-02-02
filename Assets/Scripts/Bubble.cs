@@ -16,6 +16,9 @@ public class Bubble : MonoBehaviour
     [Header("Rising")]
     [SerializeField] float riseSpeed = 10f;
     [SerializeField] float riseDuration = 4f;
+
+    [Header("Popping")]
+    [SerializeField] GameObject popSoundObject;
     
     float currTime = 0;
     bool rising = false;
@@ -57,6 +60,10 @@ public class Bubble : MonoBehaviour
     {
         activeBubbles.Remove(this);
         EndRise();
+
+        GameObject pop = Instantiate(popSoundObject);
+        pop.transform.position = transform.position;
+
         Destroy(gameObject);
     }
 

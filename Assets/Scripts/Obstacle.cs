@@ -4,20 +4,11 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    [SerializeField] GameObject destroySound;
     public void DestroyObstacle()
     {
+        GameObject sound = Instantiate(destroySound);
+        sound.transform.position = transform.position;
         Destroy(gameObject);
     }
 }
