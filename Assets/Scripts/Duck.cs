@@ -30,8 +30,7 @@ public class Duck : BaseMovement
     void Update()
     {
         ManageInput("HorizontalP1", "VerticalP1");
-        RaycastHit hit;
-        grounded = GroundCheck(out hit);
+        grounded = GroundCheck();
         capsuleCollider.material = grounded ? groundMat : airMat;
         ShootTimer();
     }
@@ -55,7 +54,7 @@ public class Duck : BaseMovement
             Shoot();
         }
 
-        animator.SetBool("IsWalking", !transform.parent && inputDirection != Vector3.zero);
+        animator.SetBool("IsWalking", !transform.parent && inputDirection != Vector3.zero && grounded);
     }
 
     void Jump()
@@ -120,13 +119,13 @@ public class Duck : BaseMovement
         rigidBody.isKinematic = false;
     }
 
-    protected override bool GroundCheck(out RaycastHit hitResult)
+    protected override bool GroundCheck()
     {
-        if (!base.GroundCheck(out hitResult)) return false;
+        if (!base.GroundCheck()) return false;
 
-        if (hitResult.collider.CompareTag("Soap") && rigidBody.velocity.y < 0)
+        if (groundData.collider.CompareTag("Soap") && rigidBody.velocity.y < 0)
         {
-            MountSoap(hitResult.collider.gameObject);
+            MountSoap(groundData.collider.gameObject);
         }
 
         return true;

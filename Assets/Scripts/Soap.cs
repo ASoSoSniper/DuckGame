@@ -5,8 +5,12 @@ using UnityEngine.EventSystems;
 
 public class Soap : BaseMovement
 {
+    [Header("Ramming")]
     [SerializeField] float ramSpeed = 30f;
     [SerializeField] float ramKnockback = 20f;
+
+    [Header("Groundcheck")]
+    [SerializeField] float groundCheckOffset = 5f;
 
     MeshCollider meshCollider;
 
@@ -24,11 +28,8 @@ public class Soap : BaseMovement
     void Update()
     {
         ManageInput("HorizontalP2", "VerticalP2");
-        RaycastHit hit;
-        grounded = GroundCheck(out hit);
+        grounded = GroundCheck();
         meshCollider.material = grounded ? groundMat : airMat;
-
-        //Debug.Log(rigidBody.velocity.magnitude);
     }
 
     private void FixedUpdate()
@@ -58,5 +59,24 @@ public class Soap : BaseMovement
             obstacle.DestroyObstacle();
 
         rigidBody.AddForce((-moveDirection + Vector3.up) * ramKnockback, ForceMode.Impulse);
+    }
+
+    protected override bool GroundCheck()
+    {
+        bool ground = false;
+
+        for (int i = 1; i > -2; i--)
+        {
+            Vector3 startPoint = mesh.transform.position +
+            (mesh.transform.forward * i * groundCheckOffset) + (mesh.transform.up * 2);
+
+            Ray ray = new Ray(startPoint, Vector3.down);
+
+            ground = Physics.Raycast(ray, out groundData, groundCheckDistance, groundMask);
+
+            if (ground) break;
+        }
+
+        return ground;
     }
 }

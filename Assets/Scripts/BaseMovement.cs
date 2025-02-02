@@ -8,6 +8,7 @@ public abstract class BaseMovement : MonoBehaviour
     protected GameObject mesh;
     protected Rigidbody rigidBody;
     protected bool grounded = false;
+    protected RaycastHit groundData;
 
     [Header("Movement")]
     [SerializeField] protected float maxSpeed = 20f;
@@ -20,6 +21,8 @@ public abstract class BaseMovement : MonoBehaviour
     [Header("Physics")]
     [SerializeField] protected PhysicMaterial groundMat;
     [SerializeField] protected PhysicMaterial airMat;
+    [SerializeField] protected float obstacleCheckDistance = 5f;
+    [SerializeField] protected LayerMask groundMask;
 
     protected Vector3 moveDirection = Vector3.zero;
 
@@ -43,7 +46,7 @@ public abstract class BaseMovement : MonoBehaviour
 
             float speed = speedDiff * acceleration;
 
-            rigidBody.AddForce(speed * inputDirection);
+            rigidBody.AddForce(speed * (inputDirection + ObstacleCheck()));
         }
         else
         {
@@ -57,23 +60,51 @@ public abstract class BaseMovement : MonoBehaviour
     {
         if (inputDirection == Vector3.zero) return;
 
+        Quaternion floorAlignment = mesh.transform.rotation;
+
+        if (grounded)
+        {
+            Vector3 floorNormal = groundData.normal;
+            floorAlignment = Quaternion.FromToRotation(Vector3.up, floorNormal);
+        }
+
         Vector3 direction = (transform.position + inputDirection * 5f) - transform.position;
         direction.y = 0;
+        Quaternion facingRotation = Quaternion.LookRotation(direction);
 
         Quaternion currRot = mesh.transform.rotation;
-        Quaternion targetRot = Quaternion.LookRotation(direction);
+        Quaternion targetRot;
+        if (grounded) targetRot = floorAlignment * facingRotation;
+        else targetRot = facingRotation;
 
         mesh.transform.rotation = Quaternion.Slerp(currRot, targetRot, rotationSpeed * Time.deltaTime);
     }
 
-    protected virtual bool GroundCheck(out RaycastHit hitResult)
+    protected virtual bool GroundCheck()
     {
         Ray ray = new Ray(transform.position, Vector3.down);
 
-        bool ground = Physics.Raycast(ray, out hitResult, groundCheckDistance);
+        bool ground = Physics.Raycast(ray, out groundData, groundCheckDistance);
 
         return ground;
     }
 
     public abstract Vector3 GetCenter();
+
+    protected Vector3 ObstacleCheck()
+    {
+        Vector3 startpoint = GetCenter();
+
+        Ray ray = new Ray(startpoint, inputDirection);
+        RaycastHit hit;
+
+        bool obstacle = Physics.Raycast(ray, out hit, obstacleCheckDistance, groundMask);
+        Debug.DrawLine(startpoint, startpoint + inputDirection * obstacleCheckDistance);
+
+        if (!obstacle) return Vector3.zero;
+
+        float dot = Vector3.Dot(hit.normal, Vector3.up);
+
+        return dot >= 0 ? hit.normal : Vector3.zero;
+    }
 }

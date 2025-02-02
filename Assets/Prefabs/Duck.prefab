@@ -79,13 +79,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 15
-  acceleration: 15
-  stopSpeed: 3
-  groundCheckDistance: 0.1
+  acceleration: 6
+  stopSpeed: 8
+  groundCheckDistance: 0.5
   rotationSpeed: 20
   verticalLaunchOffset: 1
-  groundMat: {fileID: 0}
-  airMat: {fileID: 0}
+  groundMat: {fileID: 13400000, guid: 73925d1b436563147a6f74c712731695, type: 2}
+  airMat: {fileID: 13400000, guid: 73925d1b436563147a6f74c712731695, type: 2}
+  obstacleCheckDistance: 3
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
   jumpStrength: 15
   bubblePrefab: {fileID: 1880095242134023209, guid: 7a979bb2b6fbc5d489e117794a09aa23, type: 3}
   muzzleTransform: {fileID: 2887741957178643195}

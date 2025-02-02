@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7755908054102613781}
   - component: {fileID: 6054969097135498265}
   - component: {fileID: 5750515647558343000}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Model
   m_TagString: Soap
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ Transform:
   m_GameObject: {fileID: 1858565487198886686}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -190,11 +190,16 @@ MonoBehaviour:
   stopSpeed: 5
   groundCheckDistance: 5
   rotationSpeed: 20
-  verticalLaunchOffset: 1
-  groundMat: {fileID: 0}
-  airMat: {fileID: 0}
+  verticalLaunchOffset: 0.6
+  groundMat: {fileID: 13400000, guid: 123643bc75a16e24aa8678f7c12f457a, type: 2}
+  airMat: {fileID: 13400000, guid: 73925d1b436563147a6f74c712731695, type: 2}
+  obstacleCheckDistance: 5
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
   ramSpeed: 30
   ramKnockback: 1.5
+  groundCheckOffset: 3
 --- !u!54 &1864293832040550474
 Rigidbody:
   m_ObjectHideFlags: 0
