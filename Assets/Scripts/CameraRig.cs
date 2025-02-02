@@ -78,8 +78,6 @@ public class CameraRig : MonoBehaviour
         float totalDist = Mathf.Abs(endPoint.x - startPoint.x);
         float currDist = 0;
 
-        Debug.Log(dotToStart + ", " + dotToEnd);
-
         if (dotToStart > 0f && dotToEnd > 0f)
         {
             currDist = Mathf.Abs(pointBetweenPlayers.x - startPoint.x);

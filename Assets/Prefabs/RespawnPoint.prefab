@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 5608128110113567461}
   - component: {fileID: 344804197013768844}
   - component: {fileID: 5602185714425254385}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RespawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

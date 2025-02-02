@@ -21,6 +21,7 @@ public class CameraRail : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Soap"))
         {
+            Debug.Log("Hit");
             CameraRig cameraRig = FindObjectOfType<CameraRig>();
             if (cameraRig)
                 cameraRig.AttachToRail(this);

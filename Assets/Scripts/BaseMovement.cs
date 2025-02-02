@@ -48,7 +48,7 @@ public abstract class BaseMovement : MonoBehaviour
 
             float speed = speedDiff * acceleration;
 
-            rigidBody.AddForce(speed * (inputDirection + ObstacleCheck()));
+            rigidBody.AddForce(speed * (inputDirection + (grounded ? Vector3.zero : ObstacleCheck())));
         }
         else
         {
