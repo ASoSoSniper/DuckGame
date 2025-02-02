@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class CameraRail : MonoBehaviour
 {
-    public List<Vector3> railPoints;
+    public List<GameObject> railPoints;
+
     public CameraRig.CameraMovement cameraMoveType = CameraRig.CameraMovement.MoveAlongRail;
     public float cameraDistance = 50f;
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            railPoints.Add(transform.GetChild(i).transform.position);
-        }
+        
     }
 
     private void OnTriggerEnter(Collider other)

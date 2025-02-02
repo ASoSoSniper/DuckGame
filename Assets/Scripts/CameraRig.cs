@@ -7,8 +7,7 @@ public class CameraRig : MonoBehaviour
     [SerializeField] float lerpSpeed = 20f;
 
     float cameraDistance = 50f;
-    Vector3 targetPos;
-    Vector3 currPos;
+    Vector3 targetPos = Vector3.zero;
 
     public enum CameraMovement
     {
@@ -55,8 +54,8 @@ public class CameraRig : MonoBehaviour
                 targetPos = rail.transform.position;
                 break;
             case CameraMovement.MoveAlongRail:
-                startPoint = rail.railPoints[0];
-                endPoint = rail.railPoints[1];
+                startPoint = rail.railPoints[0].transform.position;
+                endPoint = rail.railPoints[1].transform.position;
                 break;
         }
     }

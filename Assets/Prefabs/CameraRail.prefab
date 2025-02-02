@@ -112,7 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33f2850c713b9754e9b8d2bfed1ca13e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  railPoints: []
+  railPoints:
+  - {fileID: 4727340176896624947}
+  - {fileID: 7854351895068530061}
   cameraMoveType: 0
   cameraDistance: 50
 --- !u!1 &7854351895068530061
