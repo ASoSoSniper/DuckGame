@@ -8,6 +8,8 @@ public class Soap : BaseMovement
     [SerializeField] float ramSpeed = 30f;
     [SerializeField] float ramKnockback = 20f;
 
+    MeshCollider meshCollider;
+
     float currSpeed = 0;
 
     // Start is called before the first frame update
@@ -15,13 +17,16 @@ public class Soap : BaseMovement
     {
         rigidBody = GetComponent<Rigidbody>();
         mesh = transform.GetChild(0).gameObject;
+        meshCollider = mesh.transform.GetChild(0).GetComponent<MeshCollider>();
     }
 
     // Update is called once per frame
     void Update()
     {
         ManageInput("HorizontalP2", "VerticalP2");
-        grounded = GroundCheck();
+        RaycastHit hit;
+        grounded = GroundCheck(out hit);
+        meshCollider.material = grounded ? groundMat : airMat;
 
         //Debug.Log(rigidBody.velocity.magnitude);
     }
@@ -29,7 +34,7 @@ public class Soap : BaseMovement
     private void FixedUpdate()
     {
         Move();
-        //RotateMesh();
+        RotateMesh();
     }
 
     private void LateUpdate()
@@ -46,7 +51,6 @@ public class Soap : BaseMovement
     {
         if (!collision.gameObject.CompareTag("Obstacle")) return;
 
-        Debug.Log(currSpeed);
         if (currSpeed < ramSpeed) return;
 
         Obstacle obstacle = collision.gameObject.GetComponent<Obstacle>();

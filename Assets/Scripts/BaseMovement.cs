@@ -17,6 +17,10 @@ public abstract class BaseMovement : MonoBehaviour
     [SerializeField] protected float rotationSpeed = 20f;
     [SerializeField] protected float verticalLaunchOffset = 1f;
 
+    [Header("Physics")]
+    [SerializeField] protected PhysicMaterial groundMat;
+    [SerializeField] protected PhysicMaterial airMat;
+
     protected Vector3 moveDirection = Vector3.zero;
 
     protected virtual void ManageInput(string horizontal, string vertical)
@@ -62,14 +66,13 @@ public abstract class BaseMovement : MonoBehaviour
         mesh.transform.rotation = Quaternion.Slerp(currRot, targetRot, rotationSpeed * Time.deltaTime);
     }
 
-    protected bool GroundCheck()
+    protected virtual bool GroundCheck(out RaycastHit hitResult)
     {
-        if (Physics.Raycast(transform.position, Vector3.down, groundCheckDistance))
-        {
-            return true;
-        }
+        Ray ray = new Ray(transform.position, Vector3.down);
 
-        return false;
+        bool ground = Physics.Raycast(ray, out hitResult, groundCheckDistance);
+
+        return ground;
     }
 
     public abstract Vector3 GetCenter();

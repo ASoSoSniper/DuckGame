@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 9081904727441160492}
@@ -133,8 +133,8 @@ MonoBehaviour:
   launchSpeed: 10
   launchDuration: 0.5
   bounceStrength: 30
-  riseSpeed: 3
-  riseDuration: 4
+  riseSpeed: 2
+  riseDuration: 8
 --- !u!135 &7191664058683908695
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 1.2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6907783862966490368
 Rigidbody:
@@ -181,5 +181,5 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0

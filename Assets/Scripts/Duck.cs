@@ -30,7 +30,9 @@ public class Duck : BaseMovement
     void Update()
     {
         ManageInput("HorizontalP1", "VerticalP1");
-        grounded = GroundCheck();
+        RaycastHit hit;
+        grounded = GroundCheck(out hit);
+        capsuleCollider.material = grounded ? groundMat : airMat;
         ShootTimer();
     }
 
@@ -53,15 +55,17 @@ public class Duck : BaseMovement
             Shoot();
         }
 
-        animator.SetBool("IsWalking", inputDirection != Vector3.zero);
+        animator.SetBool("IsWalking", !transform.parent && inputDirection != Vector3.zero);
     }
 
     void Jump()
     {
-        if (!grounded) return;
-
-        animator.SetTrigger("Jump");
-        rigidBody.AddForce(Vector3.up * jumpStrength, ForceMode.Impulse);
+        if (grounded || transform.parent)
+        {
+            DismountSoap();
+            animator.SetTrigger("Jump");
+            rigidBody.AddForce(Vector3.up * jumpStrength, ForceMode.Impulse);
+        }
     }
 
     void Shoot()
@@ -98,5 +102,33 @@ public class Duck : BaseMovement
     public override Vector3 GetCenter()
     {
         return transform.position + transform.up * (capsuleCollider.height + verticalLaunchOffset);
+    }
+
+    void MountSoap(GameObject soap)
+    {
+        transform.parent = soap.transform;
+        transform.localPosition = Vector3.zero;
+
+        capsuleCollider.enabled = false;
+        rigidBody.isKinematic = true;
+    }
+    public void DismountSoap()
+    {
+        transform.parent = null;
+
+        capsuleCollider.enabled = true;
+        rigidBody.isKinematic = false;
+    }
+
+    protected override bool GroundCheck(out RaycastHit hitResult)
+    {
+        if (!base.GroundCheck(out hitResult)) return false;
+
+        if (hitResult.collider.CompareTag("Soap") && rigidBody.velocity.y < 0)
+        {
+            MountSoap(hitResult.collider.gameObject);
+        }
+
+        return true;
     }
 }

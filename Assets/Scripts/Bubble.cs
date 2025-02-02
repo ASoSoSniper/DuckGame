@@ -37,7 +37,7 @@ public class Bubble : MonoBehaviour
         {
             if (rising)
             {
-                EndRise();
+                PopBubble();
             }
             else
             {
@@ -56,12 +56,13 @@ public class Bubble : MonoBehaviour
     public void PopBubble()
     {
         activeBubbles.Remove(this);
+        EndRise();
         Destroy(gameObject);
     }
 
     void Bounce(Collision collision)
     {
-        BaseMovement movement = collision.gameObject.GetComponent<BaseMovement>();
+        Soap movement = collision.gameObject.GetComponent<Soap>();
         if (movement)
         {
             Vector3 direction = (movement.GetCenter() - transform.position).normalized;
@@ -106,10 +107,10 @@ public class Bubble : MonoBehaviour
 
     void EndRise()
     {
+        if (!rising) return;
+
         rising = false;
         foundCube.transform.parent = null;
         foundCube.ToggleRise(false);
-
-        PopBubble();
     }
 }
